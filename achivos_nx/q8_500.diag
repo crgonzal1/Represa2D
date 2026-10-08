@@ -1,0 +1,48 @@
+
+*** 19:43:11 *** 
+Starting Nastran Exporter
+
+*** 19:43:11 *** 
+Archivo de escritura\\awsnv-w-fs02.itbadc.itba.edu.ar\ctxusers2$\crgonzal\My 
+Documents\q8_500.dat
+ 
+*** 19:43:11 *** 
+Escribiendo en el archivo de entrada compatible de NX NASTRAN 12.2
+
+*** 19:43:11 *** 
+Escribiendo en la sección de datos en masa
+
+*** 19:43:11 *** 
+Escribiendo los nodos
+
+*** 19:43:11 *** 
+Escribiendo los elementos
+
+*** 19:43:11 *** 
+Propiedades físicas de la escritura...
+
+*** 19:43:11 *** 
+Escribiendo los materiales
+
+*** 19:43:11 *** 
+Escribiendo los conjuntos de Grados de libertad
+
+*** 19:43:11 *** 
+Sistemas de coordenadas de escritura
+
+*** 19:43:11 *** 
+Resumen de las tarjetas de datos en masa escritas
+
++----------+----------+
+|   NAME   |  NUMBER  |
++----------+----------+
+| CPLSTN6  | 37       |
+| CPLSTN8  | 1279     |
+| GRID     | 4102     |
+| MAT1     | 1        |
+| PPLANE   | 1        |
++----------+----------+
+
+*** 19:43:11 *** 
+Se escribió correctamente el archivo de entrada de NASTRAN
+
