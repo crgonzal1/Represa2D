@@ -10,7 +10,7 @@ class Mesh:
         self.element_types = []
         self.connectivity = []
 
-    def read(self, filename):
+    def read(self, filename, scale_factor=1000.0):
         file = open(filename, "r")
 
         lines = []
@@ -43,8 +43,10 @@ class Mesh:
             if global_id != i:
                 raise ValueError("Unexpected node numbering")
 
-            x = float(values[1])
-            y = float(values[2])
+            # CONVERSIÓN DE MILÍMETROS A METROS
+
+            x = float(values[1]) / scale_factor
+            y = float(values[2]) / scale_factor
 
             self.nodes.append(Node(global_id, x, y))
 
