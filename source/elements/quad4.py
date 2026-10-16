@@ -11,6 +11,25 @@ class Quad4:
         self.thickness = thickness
         self.dofs_per_node = 2
 
+        # Garantiza ordenamiento antihorario
+        self._check_and_fix_winding()
+
+    def _check_and_fix_winding(self):
+        
+        x = [node.x for node in self.nodes]
+        y = [node.y for node in self.nodes]
+        
+        area = 0.5 * (
+            (x[0]*y[1] - x[1]*y[0]) +
+            (x[1]*y[2] - x[2]*y[1]) +
+            (x[2]*y[3] - x[3]*y[2]) +
+            (x[3]*y[0] - x[0]*y[3])
+        )
+        
+        # Si el área es negativa, se invierte secuencia.
+        if area < 0:
+            self.nodes = [self.nodes[0], self.nodes[3], self.nodes[2], self.nodes[1]]
+
     def global_dofs(self):
         dofs = []
         for node in self.nodes:
@@ -43,6 +62,11 @@ class Quad4:
 
         # Calcular determinante e inversa mediante álgebra lineal
         det_jacobian = np.linalg.det(jacobian)
+
+        # Validación de seguridad (identifica elementos incorrectamente nombrados)
+        if det_jacobian <= 0:
+            raise ValueError(f"Error topológico fatal en Elemento {self.id}: Jacobiano no positivo ({det_jacobian}). Posible elemento degenerado.")
+
         inv_jacobian = np.linalg.inv(jacobian)
 
         return jacobian, inv_jacobian, det_jacobian
@@ -98,3 +122,34 @@ class Quad4:
                 k_matrix += B.T @ C @ B * det_J * self.thickness * weight
 
         return k_matrix
+
+    def compute_stress(self, u_global):
+        # Calcula el tensor de tensiones y tensiones principales en el centroide
+        # 1. Extraer desplazamientos locales de los 4 nodos (8 grados de libertad)
+        u_local = np.zeros(8)
+        dofs = self.global_dofs()
+        for i, dof in enumerate(dofs):
+            u_local[i] = u_global[dof]
+            
+        # 2. Evaluar matriz B en el centroide (xi=0.0, eta=0.0)
+        nat_derivs = self.get_natural_derivatives(0.0, 0.0)
+        _, inv_J, _ = self.get_jacobian(nat_derivs)
+        B = self.get_b_matrix(nat_derivs, inv_J)
+        
+        # 3. Calcular deformación (B * u) y tensión (C * deformación)
+        strain = B @ u_local
+        C = self.material.get_matrix()
+        stress = C @ strain  # [sigma_x, sigma_y, tau_xy]
+        
+        # 4. Calcular Tensiones Principales y Von Mises (Estado Plano de Deformación)
+        sx, sy, txy = stress[0], stress[1], stress[2]
+        center = (sx + sy) / 2.0
+        radius = np.sqrt(((sx - sy) / 2.0)**2 + txy**2)
+        sigma_1 = center + radius
+        sigma_2 = center - radius
+        
+        # Tensión en Z
+        sz = self.material.nu * (sx + sy)
+        von_mises = np.sqrt(0.5 * ((sx - sy)**2 + (sy - sz)**2 + (sz - sx)**2 + 6 * txy**2))
+        
+        return stress, sigma_1, sigma_2, von_mises

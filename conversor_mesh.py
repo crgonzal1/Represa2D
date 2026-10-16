@@ -2,10 +2,10 @@ import pandas as pd
 import ast
 import os
 
-# Lista con todas las mallas que organizaste
+# Lista todas las mallas
 MALLAS = [
-    'q4_250', 'q4_500', 'q4_750',
-    'q8_250', 'q8_500', 'q8_750'
+    '250Q4', '500Q4', '750Q4',
+    '250Q8', '500Q8', '750Q8'
 ]
 
 BASE_DIR = 'mesh_dat_files'

@@ -8,6 +8,20 @@ class Tri3:
         self.thickness = thickness
         self.dofs_per_node = 2
 
+        self._check_and_fix_winding()
+
+    def _check_and_fix_winding(self):
+        # Evaluar el determinante topológico (área signada * 2)
+        x1, y1 = self.nodes[0].x, self.nodes[0].y
+        x2, y2 = self.nodes[1].x, self.nodes[1].y
+        x3, y3 = self.nodes[2].x, self.nodes[2].y
+        
+        det = (x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)
+        
+        if det < 0:
+            # Invierte orden para que sea antihorario
+            self.nodes = [self.nodes[0], self.nodes[2], self.nodes[1]]
+
     def global_dofs(self):
         dofs = []
         for node in self.nodes:
@@ -22,7 +36,11 @@ class Tri3:
 
         # Cálculo del Área mediante el determinante jacobiano
         det_J = (x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)
-        area = abs(det_J) / 2.0
+
+        if det_J <= 0:
+            raise ValueError(f"Jacobiano no positivo.")
+
+        area = det_J / 2.0
 
         # Coeficientes geométricos (diferencias de coordenadas)
         b1, b2, b3 = y2 - y3, y3 - y1, y1 - y2
