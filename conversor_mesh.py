@@ -2,7 +2,7 @@ import pandas as pd
 import ast
 import os
 
-BASE_DIR = 'mesh_dat_files' # Asegurate de que todas las carpetas de la imagen estén acá adentro
+BASE_DIR = 'mesh_dat_files'
 OUTPUT_DIR = 'meshes'
 
 def determinar_tipo_elemento(nombre_malla):

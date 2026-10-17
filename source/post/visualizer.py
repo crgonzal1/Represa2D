@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 
 def plot_deformed_mesh(mesh, elements, u, scale_factor=1.0):
-    """
-    Grafica la configuración original y la configuración deformada de la malla.
-    """
+    
+    # Grafica la configuración original y la configuración deformada de la malla.
+    
     fig, ax = plt.subplots(figsize=(10, 8))
     
     print(f"Generando gráfico con factor de escala: {scale_factor}x...")

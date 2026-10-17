@@ -181,8 +181,7 @@ W_hormigon = area_total * thickness * rho_c * g
 W_agua = 0.0
 M_estabilizante_agua = 0.0
 
-# Usamos la suma vertical de la fuerza hidrostática que calculaste en FEM para el teórico
-# (ya que la topología del agua depende de las caras expuestas).
+# Suma vertical de la fuerza hidrostática calculada mediante FEM para el teórico
 W_agua = abs(np.sum(f[1::2]))  # Fuerzas en Y del vector de cargas hidrostáticas + gravedad
 W_agua_pura = abs(np.sum(f_orig[1::2])) - W_hormigon
 
