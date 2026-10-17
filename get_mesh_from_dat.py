@@ -49,9 +49,9 @@ def nastran_mesh_to_csv(bdf_file, output_dir, file_prefix,
         df_mats.to_csv(f'{output_dir}/{file_prefix}_materials.csv', index=False)
 
 nastran_mesh_to_csv(
-    bdf_file='archivos_nx/750Q4.dat',
+    bdf_file='archivos_nx/LST750mod.dat',
     output_dir='./mesh_dat_files',
- file_prefix='750Q4',
+ file_prefix='750LSTmod',
 export_nodes=True, export_elements=True,
 export_properties=True, export_materials=True 
 )
